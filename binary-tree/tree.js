@@ -26,6 +26,25 @@ class BinarySearchTree {
     }
   }
 
+  add(key, value) {
+    if (this.key == null) {
+        this.key = key;
+        this.value = value;
+      } else if (key % 2 === 0) {
+      if (this.left == null) {
+        this.left = new BinarySearchTree(key, value, this);
+      } else {
+        this.left.add(key, value);
+      }
+    } else {
+      if (this.right == null) {
+        this.right = new BinarySearchTree(key, value, this);
+      } else {
+        this.right.add(key, value);
+      }
+    }
+  }
+
   get(key) {
     if (this.key == key) {
       return this.value;
@@ -142,7 +161,7 @@ function counter(node) {
   let count = 1;
   if (node.left || node.right) {
     //checks the childs left node
-    console.log(`Checks for left and right`);
+    console.log('Checks for left and right');
     if (node.left.left && node.left.right) {
       //Check the childs left side
       console.log('checks for childs-left', node.key);
@@ -164,4 +183,43 @@ function counter(node) {
   }
 }
 
-console.log(counter(numbers));
+//console.log(counter(numbers));
+
+
+function checkTree(node){
+  //if node didnt satisfy bts rule
+  if (node.left.key > node.key || node.right.key < node.key){
+    console.log(node.left.key, 'is larger than', node.key);
+    return false;
+  }
+
+  else if (node.left.key < node.key && node.right.key > node.key){
+    //check each node and call function again
+    if(node.left.key){
+       return checkTree(node.left.key);
+     }
+    else{
+       return checkTree(node.right.key);
+     }
+  }  
+  
+  else {
+    //nodes pointers are null 
+    return true; 
+  }
+}
+
+let btTree = new BinarySearchTree();
+
+btTree.add( 7, 7);
+btTree.add( 6, 6);
+btTree.add( 2, 2);
+btTree.add( 1, 1);
+btTree.add( 3, 3);
+btTree.add( 8, 8);
+
+
+console.log(checkTree(btTree));
+// console.log(numbers);
+//console.log(checkTree(numbers));
+console.log(btTree);
