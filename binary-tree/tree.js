@@ -28,9 +28,9 @@ class BinarySearchTree {
 
   add(key, value) {
     if (this.key == null) {
-        this.key = key;
-        this.value = value;
-      } else if (key % 2 === 0) {
+      this.key = key;
+      this.value = value;
+    } else if (key % 2 === 0) {
       if (this.left == null) {
         this.left = new BinarySearchTree(key, value, this);
       } else {
@@ -157,69 +157,52 @@ function bst_height(tree) {
 
 //Write an algorithm to find the height of a binary search tree
 function counter(node) {
-  // console.log(node);
   let count = 1;
   if (node.left || node.right) {
-    //checks the childs left node
-    console.log('Checks for left and right');
-    if (node.left.left && node.left.right) {
-      //Check the childs left side
-      console.log('checks for childs-left', node.key);
-      if (node.left.left) {
-        //if no left-side use the right node
-        console.log('this child has a left', node.left);
-        return counter(node.left) + 1;
-      } else {
-        //left side exists --we use left side
-        return counter(node.right) + 1;
-      }
-    } else {
-      //checks the childs right node
-      console.log('this is the last thing run');
+    if (node.left && node.right) {
+        return Math.max(counter(node.left), counter(node.right)) + 1;
+    } else if(node.left) {
       return counter(node.left) + 1;
+    } else {
+      return counter(node.right) + 1;
     }
   } else {
     return 1;
   }
 }
 
-//console.log(counter(numbers));
+// console.log(counter(numbers));
 
-
-function checkTree(node){
-  //if node didnt satisfy bts rule
-  if (node.left.key > node.key || node.right.key < node.key){
-    console.log(node.left.key, 'is larger than', node.key);
+function checkTree(node, min, max) {
+  const root = node.key;
+  console.log('This is the root:', root);
+  if (!node.left && !node.right) {
+    return true;
+  } else if (node.left.key < node.key && node.left.key < root) {
+      min = node.left.key;
+      max = root;
+      console.log(`node: ${node.left.key} min: ${min} max: ${max}`);
+      return checkTree(node.left, min, root);
+  } else if (node.right.key > node.key && node.right.key > root) {
+      min = root;
+      max = node.right.key;
+      console.log(`node: ${node.right.key}, min: ${min}, max: ${max}`);
+      return checkTree(node.right, root, max);
+  } else {
     return false;
-  }
-
-  else if (node.left.key < node.key && node.right.key > node.key){
-    //check each node and call function again
-    if(node.left.key){
-       return checkTree(node.left.key);
-     }
-    else{
-       return checkTree(node.right.key);
-     }
-  }  
-  
-  else {
-    //nodes pointers are null 
-    return true; 
   }
 }
 
+
 let btTree = new BinarySearchTree();
 
-btTree.add( 7, 7);
-btTree.add( 6, 6);
-btTree.add( 2, 2);
-btTree.add( 1, 1);
-btTree.add( 3, 3);
-btTree.add( 8, 8);
+btTree.add(7, 7);
+btTree.add(6, 6);
+btTree.add(2, 2);
+btTree.add(1, 1);
+btTree.add(3, 3);
+btTree.add(8, 8);
 
-
-console.log(checkTree(btTree));
-// console.log(numbers);
-//console.log(checkTree(numbers));
-console.log(btTree);
+// console.log(checkTree(btTree));
+console.log(numbers);
+console.log(checkTree(numbers));
